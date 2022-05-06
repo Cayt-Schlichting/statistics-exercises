@@ -1,3 +1,5 @@
+from curses import beep
+from platform import win32_edition
 import numpy as np
 import pandas as pd
 
@@ -137,3 +139,22 @@ for nd in duel_set:
 #However, when you increase the number of duels, it becomes more clear that you have 
 # an advantage with 6, four-sided die
 
+
+###### CHUCK A LUCK #####
+#df of rolls
+rolls = pd.DataFrame(np.random.choice(d6,size=(nt,3)))
+#player chooses a random number
+my_num = np.random.choice(d6,1)[0]
+#create df of successful rolls, then aggregate by trial
+success = (rolls==my_num).sum(axis=1)
+#calculate odds
+win2 = len(success[success==3])/nt
+win1 = len(success[success==2])/nt
+be = len(success[success==1])/nt
+lose = len(success[success==0])/nt
+print(f'Chance of winning $2: {win2}')
+print(f'Chance of winning $1: {win1}')
+print(f'Chance of breaking even: {be}')
+print(f'Chance of no payout (losing): {lose}')
+cost = win2*2 + win1 - lose
+print(f'Avgerage cost per game: {cost}')
